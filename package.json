@@ -1,0 +1,21 @@
+{
+  "name": "1cfrontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint --cache --ext .js,.jsx,.ts,.tsx public/static",
+    "build": "tsc --target es6 --module commonjs public/static/main.ts && browserify public/static/main.js -o public/dist/bundle.js",
+    "clear": "find public/static/ -name '*.js' -delete"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shureks-den/DragNDrop-Cards.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shureks-den/DragNDrop-Cards/issues"
+  },
+  "homepage": "https://github.com/Shureks-den/DragNDrop-Cards#readme"
+}
