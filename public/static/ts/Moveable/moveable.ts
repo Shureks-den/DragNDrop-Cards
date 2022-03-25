@@ -16,7 +16,7 @@ export class MoveAble {
         });
     }
 
-    get card(): HTMLDivElement {
+    get obj(): HTMLDivElement {
         return this.moveable;
     }
 }
