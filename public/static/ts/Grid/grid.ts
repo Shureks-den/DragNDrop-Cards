@@ -36,9 +36,10 @@ export class Grid {
         });
         this.#grid.addEventListener('mouseup', () => {
             if (this.#activeElement !== null) {
+                this.#activeElement.removeEventListener('drag', this.moveableDragging.bind(this));
                 this.moveableMouseOut(this.#activeElement);
                 this.moveableDragEnd(this.#activeElement);
-                this.#activeElement.removeEventListener('drag', this.moveableDragging.bind(this));
+                this.#activeElement = null;
             }
         });
     }
@@ -58,7 +59,6 @@ export class Grid {
     }
     moveableDragEnd(moveable: HTMLDivElement) {
         moveable.classList.remove('dragable');
-        this.#activeElement = null;
     }
 
     moveableDragging(e:MouseEvent) {
@@ -78,7 +78,6 @@ export class Grid {
             this.#grid.insertBefore(this.#activeElement, <HTMLDivElement>anotherElem);
             this.moveableMouseOut(this.#activeElement);
             this.moveableDragEnd(this.#activeElement);
-            this.#activeElement = null;
         }
     }
 }

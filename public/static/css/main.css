@@ -9,7 +9,7 @@
     min-height: fit-content;
     background-color: darkgray;
     padding: 10%;
-    transition: transform .2s ease-in-out;
+    animation: transform .2s ease-in-out;
 }
 
 .dragable {
