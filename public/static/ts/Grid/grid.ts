@@ -4,7 +4,7 @@ export class Grid {
     #grid: HTMLDivElement;
     #moveableArr : MoveAble[];
     #activeElement: HTMLDivElement | null;
-    #sufficientDistance = 10;
+    #sufficientDistance = 150;
     constructor(root: HTMLDivElement) {
         this.#activeElement = null;
         this.#moveableArr = new Array();
@@ -25,32 +25,20 @@ export class Grid {
 
     makeMovemenet() {
         this.#grid.addEventListener('mousemove', (e: MouseEvent) => {
-            if (this.#activeElement === null) {
-                return;
-            }
-            this.#activeElement.hidden = true;
-            const anotherElem = document.elementFromPoint(e.clientX, e.clientY)?.closest('.card');
-            this.#activeElement.hidden = false;
-            if (anotherElem instanceof HTMLDivElement && anotherElem.classList.contains('card')) {
-                this.#grid.removeChild(this.#activeElement);
-                this.#grid.insertBefore(this.#activeElement, anotherElem);
-            }
         });
         this.#grid.addEventListener('mousedown', (e) => {
             if (e.target instanceof HTMLDivElement && e.target.classList.contains("card")) {
+                this.moveableMouseOver(e.target);
                 this.lockElement(e.target);
                 this.moveableDragStart(e.target);
-            } else if (e.target instanceof HTMLSpanElement && 
-                (<HTMLElement>e.target?.parentNode).classList.contains("сard")) {
-                this.moveableDragStart(<HTMLDivElement>e.target.parentNode);
-                this.lockElement(<HTMLDivElement>e.target.parentNode);
+                e.target.addEventListener('drag', this.moveableDragging.bind(this));
             }
         });
         this.#grid.addEventListener('mouseup', () => {
             if (this.#activeElement !== null) {
                 this.moveableMouseOut(this.#activeElement);
                 this.moveableDragEnd(this.#activeElement);
-                this.#activeElement = null;
+                this.#activeElement.removeEventListener('drag', this.moveableDragging.bind(this));
             }
         });
     }
@@ -70,5 +58,27 @@ export class Grid {
     }
     moveableDragEnd(moveable: HTMLDivElement) {
         moveable.classList.remove('dragable');
+        this.#activeElement = null;
+    }
+
+    moveableDragging(e:MouseEvent) {
+        if (this.#activeElement === null) {
+            return;
+        }
+        this.#activeElement.hidden = true;
+        const anotherElem = document.elementFromPoint(e.clientX, e.clientY)?.closest('.card');
+        const anotherElemCoord = anotherElem?.getBoundingClientRect();
+        this.#activeElement.hidden = false;
+        console.log(anotherElem)
+        if (anotherElemCoord !== undefined )
+        console.log(Math.hypot((e.clientX - anotherElemCoord?.left), (e.clientY - anotherElemCoord?.top)))
+        if (anotherElemCoord !== undefined && Math.hypot((e.clientX - anotherElemCoord?.left), 
+            (e.clientY - anotherElemCoord?.top)) < this.#sufficientDistance) {
+            this.#grid.removeChild(this.#activeElement);
+            this.#grid.insertBefore(this.#activeElement, <HTMLDivElement>anotherElem);
+            this.moveableMouseOut(this.#activeElement);
+            this.moveableDragEnd(this.#activeElement);
+            this.#activeElement = null;
+        }
     }
 }
