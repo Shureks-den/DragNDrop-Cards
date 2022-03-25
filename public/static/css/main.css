@@ -20,6 +20,9 @@
     cursor: grab;
 }
 
+.card-text {
+    user-select: none;
+}
 .card-text:hover {
     cursor: pointer;
 }

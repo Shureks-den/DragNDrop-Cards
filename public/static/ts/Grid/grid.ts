@@ -30,27 +30,13 @@ export class Grid {
             }
             this.#activeElement.hidden = true;
             const anotherElem = document.elementFromPoint(e.clientX, e.clientY)?.closest('.card');
-            console.log(anotherElem);
             this.#activeElement.hidden = false;
             if (anotherElem instanceof HTMLDivElement && anotherElem.classList.contains('card')) {
-                const {left, top} = this.#activeElement.getBoundingClientRect();
-                const deltaX = left - anotherElem.getBoundingClientRect().left;
-                const deltaY = top - anotherElem.getBoundingClientRect().top;
-                console.log(deltaX, deltaY);
-                console.log(Math.hypot(deltaX, deltaY));
-                if (Math.hypot(deltaX, deltaY) <= this.#sufficientDistance) {
-                    this.#activeElement.style.transform = `translate(${-deltaX}px,${-deltaY}px)`;
-                    anotherElem.style.transform = `translate(${deltaX}px,${deltaY}px)`;
-                    setTimeout(() => {
-                        this.#activeElement?.style.removeProperty('transform');
-                        anotherElem.style.removeProperty('transform');
-                    }, 0.2);
-                    this.#activeElement = null;
-                }
+                this.#grid.removeChild(this.#activeElement);
+                this.#grid.insertBefore(this.#activeElement, anotherElem);
             }
         });
         this.#grid.addEventListener('mousedown', (e) => {
-            console.log('down')
             if (e.target instanceof HTMLDivElement && e.target.classList.contains("card")) {
                 this.lockElement(e.target);
                 this.moveableDragStart(e.target);
@@ -61,7 +47,11 @@ export class Grid {
             }
         });
         this.#grid.addEventListener('mouseup', () => {
-            this.#activeElement = null;
+            if (this.#activeElement !== null) {
+                this.moveableMouseOut(this.#activeElement);
+                this.moveableDragEnd(this.#activeElement);
+                this.#activeElement = null;
+            }
         });
     }
 
