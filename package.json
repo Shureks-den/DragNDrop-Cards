@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "eslint --cache --ext .js,.jsx,.ts,.tsx public/static",
-    "build": "tsc --target es6 --module commonjs public/static/main.ts && browserify public/static/main.js -o public/dist/bundle.js",
+    "build": "tsc --target es6 --module commonjs public/static/ts/main.ts && browserify public/static/ts/main.js -o public/dist/bundle.js",
     "clear": "find public/static/ -name '*.js' -delete"
   },
   "repository": {
