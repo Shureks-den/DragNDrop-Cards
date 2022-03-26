@@ -34,13 +34,17 @@ export class Grid {
                 e.target.addEventListener('drag', this.moveableDragging.bind(this));
             }
         });
-        this.#grid.addEventListener('mouseup', () => {
+        this.#grid.addEventListener('mouseup', (e) => {
             if (this.#activeElement !== null) {
                 this.#activeElement.removeEventListener('drag', this.moveableDragging.bind(this));
                 this.moveableMouseOut(this.#activeElement);
                 this.moveableDragEnd(this.#activeElement);
                 this.#activeElement = null;
             }
+        });
+
+        this.#grid.addEventListener('dragover', (e)=> {
+            e.preventDefault();
         });
     }
 
@@ -66,12 +70,11 @@ export class Grid {
             return;
         }
         this.#activeElement.hidden = true;
+        console.log(document.elementFromPoint(e.clientX, e.clientY));
         const anotherElem = document.elementFromPoint(e.clientX, e.clientY)?.closest('.card');
         const anotherElemCoord = anotherElem?.getBoundingClientRect();
         this.#activeElement.hidden = false;
         console.log(anotherElem)
-        if (anotherElemCoord !== undefined )
-        console.log(Math.hypot((e.clientX - anotherElemCoord?.left), (e.clientY - anotherElemCoord?.top)))
         if (anotherElemCoord !== undefined && Math.hypot((e.clientX - anotherElemCoord?.left), 
             (e.clientY - anotherElemCoord?.top)) < this.#sufficientDistance) {
             this.#grid.removeChild(this.#activeElement);

@@ -20,4 +20,4 @@ const kindaDatabase = <StarWarsPeople[]> [];
 const root = document.getElementById('root');
 const gridWrapper = new Grid(<HTMLDivElement> root);
 
-getData(kindaDatabase, gridWrapper, 7);
+getData(kindaDatabase, gridWrapper, 10);
