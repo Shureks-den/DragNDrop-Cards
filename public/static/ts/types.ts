@@ -16,3 +16,5 @@ export type StarWarsPeople = {
     edited: string;
     url: string;
 }
+
+  

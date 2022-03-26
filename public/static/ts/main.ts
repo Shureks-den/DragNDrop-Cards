@@ -1,4 +1,3 @@
-import { StarWarsPeople } from './types';
 import { MainPage } from './Pages/mainPage';
 import { PersonalPage } from './Pages/personalPage';
 
@@ -6,7 +5,6 @@ document.addEventListener('click', (e) => {
     if (e.target instanceof HTMLAnchorElement) {
         e.preventDefault();
         const action = e.target.getAttribute('dataset');
-        console.log(e.target)
         switch (action) {
             case 'PersonalPage':
                 const id = Number(e.target.getAttribute('dataid'));

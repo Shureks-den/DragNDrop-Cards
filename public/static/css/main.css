@@ -9,7 +9,6 @@
     min-height: fit-content;
     background-color: darkgray;
     padding: 10%;
-    animation: transform .2s ease-in-out;
 }
 
 .dragable {
@@ -39,4 +38,26 @@
     background-color: blanchedalmond;
     border-radius: 20px;
     padding: 30px;
+}
+
+.info-block {
+    margin: 10px auto;
+    width: 80%;
+    min-height: 50%;
+    padding: 20px;
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: blanchedalmond;
+}
+
+.info-name {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.info-mainText {
+    font-size: large;
+    font-weight: bold;
 }
