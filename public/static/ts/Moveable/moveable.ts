@@ -2,7 +2,7 @@ export class MoveAble {
     protected moveable: HTMLDivElement
     constructor() {
         this.moveable = document.createElement('div');
-        this.moveable.addEventListener('dragend', (e) => {
+        this.moveable.addEventListener('dragend', () => {
             this.moveable.classList.remove('dragable');
         });
     }

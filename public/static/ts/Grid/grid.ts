@@ -4,7 +4,6 @@ export class Grid {
     #grid: HTMLDivElement;
     #moveableArr : MoveAble[];
     #activeElement: HTMLDivElement | null;
-    #sufficientDistance = 150;
     constructor(root: HTMLDivElement) {
         this.#activeElement = null;
         this.#moveableArr = new Array();
@@ -24,10 +23,9 @@ export class Grid {
     }
 
     makeMovemenet() {
-        this.#grid.addEventListener('mousemove', (e: MouseEvent) => {
-        });
         this.#grid.addEventListener('mousedown', (e) => {
             if (e.target instanceof HTMLDivElement && e.target.classList.contains("card")) {
+                console.log('down')
                 this.moveableMouseOver(e.target);
                 this.lockElement(e.target);
                 this.moveableDragStart(e.target);
@@ -36,6 +34,7 @@ export class Grid {
         });
         this.#grid.addEventListener('mouseup', (e) => {
             if (this.#activeElement !== null) {
+                console.log('up')
                 this.#activeElement.removeEventListener('drag', this.moveableDragging.bind(this));
                 this.moveableMouseOut(this.#activeElement);
                 this.moveableDragEnd(this.#activeElement);
@@ -70,13 +69,10 @@ export class Grid {
             return;
         }
         this.#activeElement.hidden = true;
-        console.log(document.elementFromPoint(e.clientX, e.clientY));
         const anotherElem = document.elementFromPoint(e.clientX, e.clientY)?.closest('.card');
-        const anotherElemCoord = anotherElem?.getBoundingClientRect();
         this.#activeElement.hidden = false;
-        console.log(anotherElem)
-        if (anotherElemCoord !== undefined && Math.hypot((e.clientX - anotherElemCoord?.left), 
-            (e.clientY - anotherElemCoord?.top)) < this.#sufficientDistance) {
+        if (this.#activeElement !== <HTMLDivElement> anotherElem && anotherElem !== null) {
+            console.log('kek')
             this.#grid.removeChild(this.#activeElement);
             this.#grid.insertBefore(this.#activeElement, <HTMLDivElement>anotherElem);
             this.moveableMouseOut(this.#activeElement);

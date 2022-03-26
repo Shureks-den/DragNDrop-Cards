@@ -28,14 +28,14 @@
 }
 
 .grid-wrapper {
-    width: 70%;
+    width: 80%;
     height: fit-content;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: fit-content;
     margin: 10px auto;
-    row-gap: 30px;
-    column-gap: 30px;
+    row-gap: 35px;
+    column-gap: 35px;
     background-color: blanchedalmond;
     border-radius: 20px;
     padding: 30px;
