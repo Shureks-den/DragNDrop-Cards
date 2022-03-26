@@ -4,6 +4,7 @@ export class Grid {
     #grid: HTMLDivElement;
     #moveableArr : MoveAble[];
     #activeElement: HTMLDivElement | null;
+    #lastRect: DOMRect;
     constructor(root: HTMLDivElement) {
         this.#activeElement = null;
         this.#moveableArr = new Array();
@@ -20,12 +21,12 @@ export class Grid {
     appendMoveable(obj: MoveAble) {
         this.#moveableArr.push(obj);
         this.#grid.appendChild(obj.obj);
+        this.#lastRect = this.#moveableArr[this.#moveableArr.length - 1].obj.getBoundingClientRect();
     }
 
     makeMovemenet() {
         this.#grid.addEventListener('mousedown', (e) => {
             if (e.target instanceof HTMLDivElement && e.target.classList.contains("card")) {
-                console.log('down')
                 this.moveableMouseOver(e.target);
                 this.lockElement(e.target);
                 this.moveableDragStart(e.target);
@@ -34,7 +35,6 @@ export class Grid {
         });
         this.#grid.addEventListener('mouseup', (e) => {
             if (this.#activeElement !== null) {
-                console.log('up')
                 this.#activeElement.removeEventListener('drag', this.moveableDragging.bind(this));
                 this.moveableMouseOut(this.#activeElement);
                 this.moveableDragEnd(this.#activeElement);
@@ -69,10 +69,18 @@ export class Grid {
             return;
         }
         this.#activeElement.hidden = true;
-        const anotherElem = document.elementFromPoint(e.clientX, e.clientY)?.closest('.card');
+        let anotherElem = document.elementFromPoint(e.clientX, e.clientY)?.closest('.card');
         this.#activeElement.hidden = false;
-        if (this.#activeElement !== <HTMLDivElement> anotherElem && anotherElem !== null) {
-            console.log('kek')
+        if ((e.clientX >= this.#lastRect.left && e.clientY >= this.#lastRect.top)
+            && (e.clientX <= this.#lastRect.right && e.clientY <= this.#lastRect.bottom)) {
+            this.#grid.removeChild(this.#activeElement);
+            this.#grid.appendChild(this.#activeElement);
+            return;
+        }
+        if (this.#activeElement !== <HTMLDivElement> anotherElem || anotherElem !== null) {
+            if (!anotherElem?.classList.contains('card')) {
+                return;
+            }
             this.#grid.removeChild(this.#activeElement);
             this.#grid.insertBefore(this.#activeElement, <HTMLDivElement>anotherElem);
             this.moveableMouseOut(this.#activeElement);
